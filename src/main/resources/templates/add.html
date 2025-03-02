@@ -22,6 +22,21 @@
     <!-- <body> -->
     <h1 class="text-center">Tambah Mahasiswa</h1>
     <div class="mt-3">
+      <div
+        th:if="${error}"
+        class="alert alert-danger alert-dismissible fade show"
+        role="alert"
+      >
+        <span th:text="${error}"></span>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <form action="/add" method="post">
         <div class="form-group">
           <label for="nim">NIM</label>

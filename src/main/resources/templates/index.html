@@ -26,36 +26,67 @@
     <a href="/add" class="btn btn-success w-full mt-4">Tambah Mahasiswa</a>
 
     <div class="mt-2">
-      <table class="table">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">Nama</th>
-            <th scope="col">Angkatan</th>
-            <th scope="col">Gender</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="mhs : ${mahasiswa}">
-            <td th:text="${mhs.nama}"></td>
-            <td th:text="${mhs.angkatan}"></td>
-            <td th:text="${mhs.gender}"></td>
-            <td>
-              <a
-                th:href="@{/edit/{nim}(nim=${mhs.nim})}"
-                class="btn btn-primary"
-                >Edit</a
-              >
-              <a
-                th:href="@{/delete/{nim}(nim=${mhs.nim})}"
-                class="btn btn-danger"
-                >Delete</a
-              >
-            </td>
-          </tr>
-        </tbody>
+      <form action="/" method="get" class="form-inline my-3">
+        <input
+          type="text"
+          class="form-control mr-2"
+          name="keyword"
+          placeholder="Cari berdasarkan nama atau NIM"
+          th:value="${keyword}"
+        />
+        <button type="submit" class="btn btn-primary">Cari</button>
+      </form>
+      <table>
+        <tr>
+          <th>NIM</th>
+          <th>Nama</th>
+          <th>Angkatan</th>
+          <th>Gender</th>
+          <th>Aksi</th>
+        </tr>
+        <tr th:each="mhs : ${mahasiswa}">
+          <td th:text="${mhs.nim}"></td>
+          <td th:text="${mhs.nama}"></td>
+          <td th:text="${mhs.angkatan}"></td>
+          <td th:text="${mhs.gender}"></td>
+          <td>
+            <a
+              th:href="@{/edit/{nim}(nim=${mhs.nim})}"
+              class="btn btn-primary btn-sm"
+              >Edit</a
+            >
+            <a
+              th:href="@{/delete/{nim}(nim=${mhs.nim})}"
+              class="btn btn-danger btn-sm"
+              >Hapus</a
+            >
+          </td>
+        </tr>
       </table>
     </div>
+    <h3>Mahasiswa Terhapus</h3>
+    <table>
+      <tr>
+        <th>NIM</th>
+        <th>Nama</th>
+        <th>Angkatan</th>
+        <th>Gender</th>
+        <th>Aksi</th>
+      </tr>
+      <tr th:each="mhs : ${deletedMahasiswa}">
+        <td th:text="${mhs.nim}"></td>
+        <td th:text="${mhs.nama}"></td>
+        <td th:text="${mhs.angkatan}"></td>
+        <td th:text="${mhs.gender}"></td>
+        <td>
+          <a
+            th:href="@{/restore/{nim}(nim=${mhs.nim})}"
+            class="btn btn-success btn-sm"
+            >Pulihkan</a
+          >
+        </td>
+      </tr>
+    </table>
 
     <!-- Bootstrap -->
     <script
@@ -73,6 +104,54 @@
       integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
       crossorigin="anonymous"
     ></script>
+    <script>
+      function openDeleteModal(element) {
+        let deleteUrl = element.getAttribute("data-delete-url"); // Ambil URL delete dari atribut
+        document
+          .getElementById("confirmDeleteBtn")
+          .setAttribute("href", deleteUrl); // Set href tombol hapus di modal
+        $("#deleteModal").modal("show"); // Tampilkan modal
+      }
+    </script>
+
     <!-- Bootstrap -->
+    <!-- Modal Konfirmasi Hapus -->
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Apakah Anda yakin ingin menghapus mahasiswa ini?
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Batal
+            </button>
+            <a id="confirmDeleteBtn" class="btn btn-danger">Hapus</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
