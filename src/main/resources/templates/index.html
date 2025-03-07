@@ -46,10 +46,9 @@
                 class="btn btn-primary"
                 >Edit</a
               >
-              <a
-                th:href="@{/delete/{nim}(nim=${mhs.nim})}"
-                class="btn btn-danger"
-                >Delete</a
+              <a th:href="@{/delete/{nim}(nim=${mhs.nim})}" class="btn btn-danger">Hapus</a>
+              <a th:href="@{/detail/{nim}(nim=${mhs.nim})}" class="btn btn-info"
+                >Detail</a
               >
             </td>
           </tr>
@@ -58,6 +57,7 @@
     </div>
 
     <!-- Bootstrap -->
+    </script>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

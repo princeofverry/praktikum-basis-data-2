@@ -1,7 +1,9 @@
 // MahasiswaController.java 
 package com.example.controller; 
  
-import java.util.List; 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.jdbc.core.BeanPropertyRowMapper; 
 import org.springframework.jdbc.core.JdbcTemplate; 
@@ -68,4 +70,23 @@ mahasiswa.getAngkatan(), mahasiswa.getGender(),
         jdbcTemplate.update(sql, nim); 
         return "redirect:/"; 
     } 
+
+    @GetMapping("/detail/{nim}")
+public String detail(@PathVariable("nim") String nim, Model model) {
+    // Mengambil data mahasiswa
+    String sqlMahasiswa = "SELECT * FROM mahasiswa WHERE nim = ?";
+    Mahasiswa mahasiswa = jdbcTemplate.queryForObject(sqlMahasiswa, BeanPropertyRowMapper.newInstance(Mahasiswa.class), nim);
+    
+    // Mengambil mata kuliah yang diambil mahasiswa
+    String sqlIRS = "SELECT m.matkul_nama, m.sks, m.hari, i.status FROM irs i " +
+                    "JOIN matakuliah m ON i.matkul_id = m.matkul_id " +
+                    "WHERE i.nim = ?";
+    List<Map<String, Object>> matkulList = jdbcTemplate.queryForList(sqlIRS, nim);
+    
+    model.addAttribute("mahasiswa", mahasiswa);
+    model.addAttribute("matkulList", matkulList);
+    
+    return "detail";
+}
+
 }
